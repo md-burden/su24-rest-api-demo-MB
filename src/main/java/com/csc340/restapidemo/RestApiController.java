@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 public class RestApiController {
 
     Map<Integer, Student> studentDatabase = new HashMap<>();
+    StudentsFileController studentDb = StudentsFileController.getInstance();
 
     /**
      * Hello World API endpoint.
@@ -74,6 +75,12 @@ public class RestApiController {
         studentDatabase.put(student.getId(), student);
         return studentDatabase.values();
     }
+
+    // TODO: [PUT] /students/update/{id}
+//    @PutMapping("/students/update/{id}")
+//    public Object updateStudent(@PathVariable int id) {
+//
+//    }
 
     /**
      * Delete a Student by id
