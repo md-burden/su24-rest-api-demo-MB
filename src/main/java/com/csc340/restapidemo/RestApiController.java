@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class RestApiController {
 
     Map<Integer, Student> studentDatabase = new HashMap<>();
-    StudentsFileController studentDb = StudentsFileController.getInstance();
+    StudentsFileController studentsFileController = StudentsFileController.getInstance();
 
     /**
      * Hello World API endpoint.
@@ -46,10 +46,7 @@ public class RestApiController {
      */
     @GetMapping("students/all")
     public Object getAllStudents() {
-        if (studentDatabase.isEmpty()) {
-            studentDatabase.put(1, new Student(1, "sample1", "csc", 3.86));
-        }
-        return studentDatabase.values();
+        return studentsFileController.getStudents();
     }
 
     /**
@@ -59,8 +56,12 @@ public class RestApiController {
      * @return the student.
      */
     @GetMapping("students/{id}")
-    public Student getStudentById(@PathVariable int id) {
-        return studentDatabase.get(id);
+    public String getStudentById(@PathVariable int id) {
+        Student student = studentsFileController.getStudentById(id);
+        if(student == null) {
+            return "No student with that ID.";
+        }
+        return student.toString();
     }
 
 
@@ -72,8 +73,7 @@ public class RestApiController {
      */
     @PostMapping("students/create")
     public Object createStudent(@RequestBody Student student) {
-        studentDatabase.put(student.getId(), student);
-        return studentDatabase.values();
+        return studentsFileController.addStudent(student);
     }
 
     // TODO: [PUT] /students/update/{id}

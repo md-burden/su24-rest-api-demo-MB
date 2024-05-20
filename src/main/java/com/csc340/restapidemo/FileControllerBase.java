@@ -1,20 +1,14 @@
 package com.csc340.restapidemo;
 
+import java.util.List;
+
 interface FileControllerBase {
 
-    // Should create file if one is not already made
     void createFile();
-
-    // Add student to BD
-    void addStudent(Student student);
-
-    // Update specified value(s) in file
+    List<Student> addStudent(Student student);
     void updateStudent();
-
-    // Read values in file
-    void getStudents();
-
-    // Delete student from DB
+    List<Student> getStudents();
+    Student getStudentById(int id);
     void deleteStudent();
 
 }
