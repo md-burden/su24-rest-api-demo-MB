@@ -6,9 +6,10 @@ interface FileControllerBase {
 
     void createFile();
     List<Student> addStudent(Student student);
-    void updateStudent();
+    List<Student> deleteStudent(int id);
     List<Student> getStudents();
+    Student updateStudent(int id,Student student);
     Student getStudentById(int id);
-    void deleteStudent();
+
 
 }

@@ -1,7 +1,6 @@
 package com.csc340.restapidemo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -87,8 +86,7 @@ public class StudentsFileController implements FileControllerBase {
     public Student getStudentById(int id) {
         try{
             StudentDataBase studentDataBase = mapper.readValue(studentsFile, StudentDataBase.class);
-            Student student = studentDataBase.getStudentById(id);
-            return student;
+            return studentDataBase.getStudentById(id);
         }
         catch (IOException e){
             e.printStackTrace();
@@ -98,10 +96,30 @@ public class StudentsFileController implements FileControllerBase {
     }
 
     @Override
-    public void updateStudent() {
-
+    public Student updateStudent(int id, Student student) {
+        try{
+            StudentDataBase studentDataBase = mapper.readValue(studentsFile, StudentDataBase.class);
+            Student newStudent = studentDataBase.updateStudent(id, student);
+            mapper.writeValue(studentsFile, studentDataBase);
+            return newStudent;
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
-    public void deleteStudent() {}
+    public List<Student> deleteStudent(int id) {
+        try{
+            StudentDataBase studentDataBase = mapper.readValue(studentsFile, StudentDataBase.class);
+            studentDataBase.deleteStudent(id);
+            mapper.writeValue(studentsFile, studentDataBase);
+            return studentDataBase.getStudentList();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

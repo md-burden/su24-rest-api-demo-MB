@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,7 +51,7 @@ public class RestApiController {
     }
 
     /**
-     * Get one student by Id
+     * Get one student by ID
      *
      * @param id the unique student id.
      * @return the student.
@@ -76,11 +77,15 @@ public class RestApiController {
         return studentsFileController.addStudent(student);
     }
 
-    // TODO: [PUT] /students/update/{id}
-//    @PutMapping("/students/update/{id}")
-//    public Object updateStudent(@PathVariable int id) {
-//
-//    }
+
+    @PutMapping("/students/update/{id}")
+    public Object updateStudent(@PathVariable int id, @RequestBody Student student) {
+        Student newStudent = studentsFileController.updateStudent(id, student);
+        if(newStudent == null) {
+            return "No student with that ID.";
+        }
+        return "Student has been updated: " + newStudent.toString();
+    }
 
     /**
      * Delete a Student by id
@@ -89,9 +94,12 @@ public class RestApiController {
      * @return the List of Students.
      */
     @DeleteMapping("students/delete/{id}")
-    public Object deleteStudent(@PathVariable int id) {
-        studentDatabase.remove(id);
-        return studentDatabase.values();
+    public String deleteStudent(@PathVariable int id) {
+        List<Student> studentList = studentsFileController.deleteStudent(id);
+        if(studentList == null) {
+            return "No student with that ID.";
+        }
+        return studentList.toString();
     }
 
     /**
@@ -156,5 +164,28 @@ public class RestApiController {
             return "error in /univ";
         }
 
+    }
+
+    @GetMapping("/emoji")
+    public Object getDog() {
+        try{
+            String url = "https://emojihub.yurace.pro/api/random";
+            RestTemplate restTemplate = new RestTemplate();
+            ObjectMapper mapper = new ObjectMapper();
+
+            String response = restTemplate.getForObject(url, String.class);
+            Emoji emoji = mapper.readValue(response, Emoji.class);
+            System.out.println("Name: " + emoji.getName());
+            System.out.println("Category" + emoji.getCategory());
+            System.out.println("Group: " + emoji.getGroup());
+
+            return emoji.toString();
+
+        }
+        catch(Exception e){
+            Logger.getLogger(RestApiController.class.getName()).log(Level.SEVERE,
+                    null, e);
+            return "error in /emoji";
+        }
     }
 }
