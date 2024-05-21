@@ -57,7 +57,7 @@ public class RestApiController {
      * @return the student.
      */
     @GetMapping("students/{id}")
-    public String getStudentById(@PathVariable int id) {
+    public Object getStudentById(@PathVariable int id) {
         Student student = studentsFileController.getStudentById(id);
         if(student == null) {
             return "No student with that ID.";
@@ -84,7 +84,7 @@ public class RestApiController {
         if(newStudent == null) {
             return "No student with that ID.";
         }
-        return "Student has been updated: " + newStudent.toString();
+        return "Student has been updated:\n " + newStudent.toString();
     }
 
     /**
@@ -94,12 +94,12 @@ public class RestApiController {
      * @return the List of Students.
      */
     @DeleteMapping("students/delete/{id}")
-    public String deleteStudent(@PathVariable int id) {
+    public Object deleteStudent(@PathVariable int id) {
         List<Student> studentList = studentsFileController.deleteStudent(id);
         if(studentList == null) {
             return "No student with that ID.";
         }
-        return studentList.toString();
+        return studentList;
     }
 
     /**
@@ -177,7 +177,8 @@ public class RestApiController {
             Emoji emoji = mapper.readValue(response, Emoji.class);
             System.out.println("Name: " + emoji.getName());
             System.out.println("Category" + emoji.getCategory());
-            System.out.println("Group: " + emoji.getGroup());
+            System.out.printf("Group: %s%n%n", emoji.getGroup());
+
 
             return emoji.toString();
 

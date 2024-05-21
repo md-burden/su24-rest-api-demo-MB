@@ -19,6 +19,14 @@ public class Student {
         this.gpa = gpa;
     }
 
+    public Student(int id){
+        this.id = id;
+        name = "";
+        major = "";
+        gpa = 0.0;
+    }
+
+
     public int getId() {
         return id;
     }

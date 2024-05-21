@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StudentsFileController implements FileControllerBase {
 
@@ -24,10 +26,13 @@ public class StudentsFileController implements FileControllerBase {
         return instance;
     }
 
+
+    /**
+     * Creates a new DB file if one does not exist.
+     */
     @Override
     public void createFile() {
         try {
-            // Creates new file is one does not exists
             if (studentsFile.createNewFile()) {
                 System.out.println("Created file: " + studentsFile);
                 initializeDb();
@@ -36,8 +41,7 @@ public class StudentsFileController implements FileControllerBase {
             }
         } catch (IOException e) {
             System.out.println("Error creating file: " + studentsFile);
-            // Ignore error, no "robust logging" needed here
-            e.printStackTrace();
+            Logger.getLogger(StudentsFileController.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -51,11 +55,16 @@ public class StudentsFileController implements FileControllerBase {
             mapper.writeValue(studentsFile, studentDataBase);
         }
         catch(IOException e){
-            // Ignore error, no "robust logging" needed here
-            e.printStackTrace();
+            Logger.getLogger(StudentsFileController.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
+    /**
+     * Deserializes the JSON database into a StudentDataBase object.
+     * Then adds the Student to the database object and writes the update data to the file.
+     * @param student Student data to add
+     * @return Updated list of Students
+     */
     @Override
     public List<Student> addStudent(Student student){
         try{
@@ -65,11 +74,15 @@ public class StudentsFileController implements FileControllerBase {
             return studentDataBase.getStudentList();
         }
         catch (IOException e) {
-            e.printStackTrace();
+            Logger.getLogger(StudentsFileController.class.getName()).log(Level.SEVERE, null, e);
         }
         return null;
     }
 
+    /**
+     *
+     * @return List of current Students
+     */
     @Override
     public List<Student> getStudents() {
     try{
@@ -77,11 +90,16 @@ public class StudentsFileController implements FileControllerBase {
         return studentDataBase.getStudentList();
     }
     catch (IOException e){
-        e.printStackTrace();
+        Logger.getLogger(StudentsFileController.class.getName()).log(Level.SEVERE, null, e);
     }
     return null;
     }
 
+    /**
+     * Deserializes the JSON database and searches for a Student by their ID.
+     * @param id ID of the Student
+     * @return Student with given ID, otherwise null
+     */
     @Override
     public Student getStudentById(int id) {
         try{
@@ -89,12 +107,18 @@ public class StudentsFileController implements FileControllerBase {
             return studentDataBase.getStudentById(id);
         }
         catch (IOException e){
-            e.printStackTrace();
+            Logger.getLogger(StudentsFileController.class.getName()).log(Level.SEVERE, null, e);
         }
 
         return null;
     }
 
+    /**
+     * Updates the information of a specific Student. Will not update their ID.
+     * @param id ID of Student to update
+     * @param student New Student data
+     * @return Updated Student
+     */
     @Override
     public Student updateStudent(int id, Student student) {
         try{
@@ -104,11 +128,16 @@ public class StudentsFileController implements FileControllerBase {
             return newStudent;
         }
         catch (IOException e){
-            e.printStackTrace();
+            Logger.getLogger(StudentsFileController.class.getName()).log(Level.SEVERE, null, e);
         }
         return null;
     }
 
+    /**
+     * Deletes a Student if one exists for the given ID
+     * @param id ID of the Student to delete
+     * @return Updated list of Students
+     */
     @Override
     public List<Student> deleteStudent(int id) {
         try{
@@ -118,7 +147,7 @@ public class StudentsFileController implements FileControllerBase {
             return studentDataBase.getStudentList();
         }
         catch(IOException e){
-            e.printStackTrace();
+            Logger.getLogger(StudentsFileController.class.getName()).log(Level.SEVERE, null, e);
         }
         return null;
     }
