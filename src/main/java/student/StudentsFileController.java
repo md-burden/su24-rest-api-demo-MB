@@ -1,4 +1,4 @@
-package com.csc340.restapidemo;
+package student;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;

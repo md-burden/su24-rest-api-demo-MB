@@ -1,4 +1,4 @@
-package com.csc340.restapidemo;
+package emoji;
 
 import java.util.List;
 

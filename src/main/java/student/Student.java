@@ -1,4 +1,4 @@
-package com.csc340.restapidemo;
+package student;
 
 public class Student {
 
